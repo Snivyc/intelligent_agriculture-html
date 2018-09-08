@@ -1,0 +1,62 @@
+{
+  "code": 0,
+  "des": "查询成功",
+  "type": {
+    "MAC": "1",
+    "X": 119.3,
+    "Y": 32.3,
+    "Type": "温度",
+    "Temperature": true,
+    "Humidity": false,
+    "Pressure": false,
+    "Precipitation": false,
+    "Wind_speed": false,
+    "Wind_direction": false,
+    "Soil_temperature": false,
+    "Soil_water_content": false,
+    "Light": false,
+    "Dissolved_oxygen": false,
+    "Oxygen_density": false,
+    "CO2_density": false,
+    "Water_level": false,
+    "Node_name": "Temperatue"
+  },
+  "data": [
+    {
+      "MAC": "1",
+      "Time": "2018-08-09T17:29:00",
+      "Temperature": 34.0,
+      "Humidity": null,
+      "Pressure": null,
+      "Precipitation": null,
+      "Wind_speed": null,
+      "Wind_direction": null,
+      "Soil_temperature": null,
+      "Soil_water_content": null,
+      "Light": null,
+      "Dissolved_oxygen": null,
+      "Oxygen_density": null,
+      "CO2_density": null,
+      "Water_level": null,
+      "id": 1
+    },
+    {
+      "MAC": "1",
+      "Time": "2018-08-14T14:48:20",
+      "Temperature": 37.0,
+      "Humidity": null,
+      "Pressure": null,
+      "Precipitation": null,
+      "Wind_speed": null,
+      "Wind_direction": null,
+      "Soil_temperature": null,
+      "Soil_water_content": null,
+      "Light": null,
+      "Dissolved_oxygen": null,
+      "Oxygen_density": null,
+      "CO2_density": null,
+      "Water_level": null,
+      "id": 7
+    }
+  ]
+}

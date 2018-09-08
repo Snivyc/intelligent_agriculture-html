@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>智慧农业</title>
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/style.css">
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=NxsQZQqKqjQCfUWY9PT9AM6i44wizGv9">
+      //v3.0版本的引用方式：src="http://api.map.baidu.com/api?v=3.0&ak=您的密钥"
+  </script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">智慧农业</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">退了</a></li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul id="node-container" class="layui-nav layui-nav-tree" lay-filter="test">
+        <!--<li class="layui-nav-item layui-nav-itemed">-->
+        <!--<a class="" href="javascript:;">所有商品</a>-->
+        <!--<dl class="layui-nav-child">-->
+        <!--<dd><a href="javascript:;">列表一</a></dd>-->
+        <!--<dd><a href="javascript:;">列表二</a></dd>-->
+        <!--<dd><a href="javascript:;">列表三</a></dd>-->
+        <!--<dd><a href="">超链接</a></dd>-->
+        <!--</dl>-->
+        <!--</li>-->
+        <!--<li class="layui-nav-item">-->
+        <!--<a href="javascript:;">解决方案</a>-->
+        <!--<dl class="layui-nav-child">-->
+        <!--<dd><a href="javascript:;">列表一</a></dd>-->
+        <!--<dd><a href="javascript:;">列表二</a></dd>-->
+        <!--<dd><a href="">超链接</a></dd>-->
+        <!--</dl>-->
+        <!--</li>-->
+        <!--<li class="layui-nav-item"><a href="">云市场</a></li>-->
+        <!--<li class="layui-nav-item"><a href="">发布商品</a></li>-->
+      </ul>
+    </div>
+  </div>
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <table id="demo" lay-filter="test"></table>
+
+  </div>
+
+  <!--<div class="layui-footer">-->
+  <!--&lt;!&ndash; 底部固定区域 &ndash;&gt;-->
+  <!--© layui.com - 底部固定区域-->
+  <!--</div>-->
+</div>
+<script src="./layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+
+    layui.use(['element','table'], function () {
+        let table = layui.table;
+        let element = layui.element;
+        let filterData = function (data) {
+            for (let i of data) {
+                // console.log(i);
+                for (let index in i) {
+                    let value =i[index];
+                    // console.log(value);
+                    if (value === null || index ==="Time" || index === "id") {
+                        delete i[index];
+                    }
+                }
+            }
+            return data
+        };
+
+        let appNode = function(node){
+
+            $("[mac$=" + node.MAC+ "]").remove();
+            let jObj=$("<li></li>").text("");
+            jObj.addClass('layui-nav-item').attr("MAC", node.MAC);
+            // jObj.attr("ID", "fuck" + '1');
+            let nodeString = "节点" + node.MAC +" ";
+            for (let i in node){
+                if (i !== "MAC" && i !== "X" && i !== "Y" && i !== "Type" && i !== "Node_name"){
+                    nodeString += i + ":" + node[i]
+                }
+            }
+            jObj.append("<a href=''>" + nodeString + "</a>");
+            $("#node-container").append(jObj);
+        };
+
+        let reflash = function(){
+            let jqxhr = $.ajax('http://119.29.226.30/agriculture/index/Showall', {
+                dataType: 'json'
+            }).done(function (data) {
+                // console.log(data.data[0].MAC);
+                // filterData(data.data)
+                let dates = filterData(data.data);
+                // console.log(dates);
+                for (let i of dates){
+                    appNode(i)
+                }
+            })
+        };
+
+        reflash();
+        $(function(){
+            setInterval(reflash,10000);
+        });
+
+
+
+        let templst = [{field: 'Time', title: 'time',  sort: true, fixed: 'left'}];
+        $.ajax('http://119.29.226.30/agriculture/Result/showtypebymac?mac=2', {
+            dataType: 'json'
+        }).done(function (data) {
+            // filterData(data.data)
+            for (let index in data.data) {
+                let value = data.data[index];
+                if (value === true) {
+                    templst.push({field:index, title:index})
+                }
+            }
+            console.log(templst);
+            table.render({
+                elem: '#demo'
+                ,height: 315
+                ,url: 'http://119.29.226.30/agriculture/Result/showbymac?mac=2' //数据接口
+                // ,page: true //开启分页
+                ,cols: [templst]
+                ,response: {
+                    statusCode:1
+                }
+            });
+        }
+        );
+
+
+    });
+
+
+
+</script>
+</body>
+</html>

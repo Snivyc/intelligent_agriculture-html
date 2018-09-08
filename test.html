@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+  <title>Title</title>
+</head>
+<body>
+<p>
+
+</p>
+
+
+<script>
+    // $.get("http://api.money.126.net/data/feed/0000001,1399001?callback=refreshPrice",function(data,status){
+    //     alert("Data: " + data + "\nStatus: " + status);
+    // });
+
+    // function refreshPrice(data) {
+    //     console.log()
+    // }
+    //
+    // var
+    //     js = document.createElement('script'),
+    //     head = document.getElementsByTagName('head')[0];
+    // js.src = 'http://119.29.226.30/agriculture/Result/Showall?callback=refreshPrice';
+    // head.appendChild(js);
+    let filterData = function (data) {
+        for (let i of data) {
+            // console.log(i);
+            for (let index in i) {
+                let value = i[index];
+                // console.log(value);
+                if (value === null || index ==="Time" || index === "id") {
+                    delete i[index];
+                }
+            }
+        }
+        return data
+    }
+
+    let jqxhr = $.ajax('http://119.29.226.30/agriculture/Result/Showall', {
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data.data[0].MAC)
+        // filterData(data.data)
+        console.log(JSON.stringify(filterData(data.data)))
+
+    })
+</script>
+</body>
+</html>
